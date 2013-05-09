@@ -25,15 +25,15 @@ public class EventListener implements Listener{
     public void OnSnowballHitPlayer(EntityDamageByEntityEvent event){
     	if(event.getDamager() instanceof Snowball && event.getEntity() instanceof Player){
     		
-    		int X1 = plugin.getConfig().getInt("Arenas.Test.X1");
-    		int X2 = plugin.getConfig().getInt("Arenas.Test.X2");
-    		int X3 = plugin.getConfig().getInt("Arenas.Test.X3");
-    		int X4 = plugin.getConfig().getInt("Arenas.Test.X4");
+    		int X1 = plugin.getConfig().getInt("Arenas.test.X1");
+    		int X2 = plugin.getConfig().getInt("Arenas.test.X2");
+    		int X3 = plugin.getConfig().getInt("Arenas.test.X3");
+    		int X4 = plugin.getConfig().getInt("Arenas.test.X4");
     		
-    		int Z1 = plugin.getConfig().getInt("Arenas.Test.Z1");
-    		int Z2 = plugin.getConfig().getInt("Arenas.Test.Z2");
-    		int Z3 = plugin.getConfig().getInt("Arenas.Test.Z3");
-    		int Z4 = plugin.getConfig().getInt("Arenas.Test.Z4");
+    		int Z1 = plugin.getConfig().getInt("Arenas.test.Z1");
+    		int Z2 = plugin.getConfig().getInt("Arenas.test.Z2");
+    		int Z3 = plugin.getConfig().getInt("Arenas.test.Z3");
+    		int Z4 = plugin.getConfig().getInt("Arenas.test.Z4");
     		
     		//Do some comparison
     		
@@ -64,15 +64,15 @@ public class EventListener implements Listener{
 		if(event.getEntity() instanceof Snowball){
 			
     		
-    		int X1 = plugin.getConfig().getInt("Arenas.Test.X1");
-    		int X2 = plugin.getConfig().getInt("Arenas.Test.X2");
-    		int X3 = plugin.getConfig().getInt("Arenas.Test.X3");
-    		int X4 = plugin.getConfig().getInt("Arenas.Test.X4");
+    		int X1 = plugin.getConfig().getInt("Arenas.test.X1");
+    		int X2 = plugin.getConfig().getInt("Arenas.test.X2");
+    		int X3 = plugin.getConfig().getInt("Arenas.test.X3");
+    		int X4 = plugin.getConfig().getInt("Arenas.test.X4");
     		
-    		int Z1 = plugin.getConfig().getInt("Arenas.Test.Z1");
-    		int Z2 = plugin.getConfig().getInt("Arenas.Test.Z2");
-    		int Z3 = plugin.getConfig().getInt("Arenas.Test.Z3");
-    		int Z4 = plugin.getConfig().getInt("Arenas.Test.Z4");
+    		int Z1 = plugin.getConfig().getInt("Arenas.test.Z1");
+    		int Z2 = plugin.getConfig().getInt("Arenas.test.Z2");
+    		int Z3 = plugin.getConfig().getInt("Arenas.test.Z3");
+    		int Z4 = plugin.getConfig().getInt("Arenas.test.Z4");
     		
     		//Do some comparison
     		
@@ -108,28 +108,28 @@ public class EventListener implements Listener{
 			}
 			
 			if(team == 1){
-				SpawnX = plugin.getConfig().getInt("Arenas.Test.SpawnRed.X");
-				SpawnZ = plugin.getConfig().getInt("Arenas.Test.SpawnRed.Z");
+				SpawnX = plugin.getConfig().getInt("Arenas.test.SpawnRed.X");
+				SpawnZ = plugin.getConfig().getInt("Arenas.test.SpawnRed.Z");
 			} else if(team == 2){
-				SpawnX = plugin.getConfig().getInt("Arenas.Test.SpawnBlue.X");
-				SpawnZ = plugin.getConfig().getInt("Arenas.Test.SpawnBlue.Z");
+				SpawnX = plugin.getConfig().getInt("Arenas.test.SpawnBlue.X");
+				SpawnZ = plugin.getConfig().getInt("Arenas.test.SpawnBlue.Z");
 			}
 			
-			int X1 = plugin.getConfig().getInt("Arenas.Test.MiddleLine.X1");
-			int X2 = plugin.getConfig().getInt("Arenas.Test.MiddleLine.X2");
-			int Z1 = plugin.getConfig().getInt("Arenas.Test.MiddleLine.Z1");
-			int Z2 = plugin.getConfig().getInt("Arenas.Test.MiddleLine.Z2");
+			int X1 = plugin.getConfig().getInt("Arenas.test.MiddleLine.X1");
+			int X2 = plugin.getConfig().getInt("Arenas.test.MiddleLine.X2");
+			int Z1 = plugin.getConfig().getInt("Arenas.test.MiddleLine.Z1");
+			int Z2 = plugin.getConfig().getInt("Arenas.test.MiddleLine.Z2");
 			Object world = player.getWorld();
 			
-    		int bX1 = plugin.getConfig().getInt("Arenas.Test.X1");
-    		int bX2 = plugin.getConfig().getInt("Arenas.Test.X2");
-    		int bX3 = plugin.getConfig().getInt("Arenas.Test.X3");
-    		int bX4 = plugin.getConfig().getInt("Arenas.Test.X4");
+    		int bX1 = plugin.getConfig().getInt("Arenas.test.X1");
+    		int bX2 = plugin.getConfig().getInt("Arenas.test.X2");
+    		int bX3 = plugin.getConfig().getInt("Arenas.test.X3");
+    		int bX4 = plugin.getConfig().getInt("Arenas.test.X4");
     		
-    		int bZ1 = plugin.getConfig().getInt("Arenas.Test.Z1");
-    		int bZ2 = plugin.getConfig().getInt("Arenas.Test.Z2");
-    		int bZ3 = plugin.getConfig().getInt("Arenas.Test.Z3");
-    		int bZ4 = plugin.getConfig().getInt("Arenas.Test.Z4");
+    		int bZ1 = plugin.getConfig().getInt("Arenas.test.Z1");
+    		int bZ2 = plugin.getConfig().getInt("Arenas.test.Z2");
+    		int bZ3 = plugin.getConfig().getInt("Arenas.test.Z3");
+    		int bZ4 = plugin.getConfig().getInt("Arenas.test.Z4");
 			
 			int xMax = Math.max(X1, X2);
 			int xMin = Math.min(X1, X2);

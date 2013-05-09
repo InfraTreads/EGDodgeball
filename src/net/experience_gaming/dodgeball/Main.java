@@ -1,6 +1,8 @@
 package net.experience_gaming.dodgeball;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.bukkit.ChatColor;
@@ -18,6 +20,12 @@ public class Main extends JavaPlugin{
 	//define some vars
 	public final Logger logger = Logger.getLogger("Minecraft");
 	public Plugin plugin;
+	public static Map<Player, Integer> playerOriginalLocX = new HashMap<Player, Integer>();
+	public static Map<Player, Integer> playerOriginalLocY = new HashMap<Player, Integer>();
+	public static Map<Player, Integer> playerOriginalLocZ = new HashMap<Player, Integer>();
+	public static Map<Player, Integer> playerOriginalLocYaw = new HashMap<Player, Integer>();
+	public static Map<Player, Integer> playerOriginalLocPitch = new HashMap<Player, Integer>();
+	public static Map<Player, World> playerOriginalLocWorld = new HashMap<Player, World>();
     public static ArrayList<Player> playersInGame = new ArrayList<Player>();
     public static ArrayList<Player> playersInGameRed = new ArrayList<Player>();
     public static ArrayList<Player> playersInGameBlue = new ArrayList<Player>();
@@ -106,6 +114,7 @@ public class Main extends JavaPlugin{
             		playersInGame.remove(player);
             		playersInGameRed.remove(player);
             		playersInGameBlue.remove(player);
+            		tpPlayerToOriginalLoc(player);
             		
             	//if arg0 = join
             	} else if(args[0].equalsIgnoreCase("join")){
@@ -118,28 +127,39 @@ public class Main extends JavaPlugin{
             				if(playersInGameRed.size() == playersInGameBlue.size()){
             					playersInGameRed.add(player);
             					player.sendMessage(ChatColor.RED + "You joined team RED!");
+            					tpPlayerToLobby(player);
             				} else if (playersInGameRed.size() < playersInGameBlue.size()) {
             					playersInGameRed.add(player);
             					player.sendMessage(ChatColor.RED + "You joined team RED!");
+            					tpPlayerToLobby(player);
             				} else if (playersInGameRed.size() > playersInGameBlue.size()){
             					playersInGameBlue.add(player);
             					player.sendMessage(ChatColor.BLUE + "You joined team BLUE!");
+            					tpPlayerToLobby(player);
             				}
             			} else if(args[1].equalsIgnoreCase("blue")){
             				playersInGameBlue.add(player);
             				player.sendMessage(ChatColor.BLUE + "You joined team BLUE!");
+            				tpPlayerToLobby(player);
             			} else if(args[1].equalsIgnoreCase("red")){
             				playersInGameRed.add(player);
             				player.sendMessage(ChatColor.RED + "You joined team RED!");
+            				tpPlayerToLobby(player);
             			}
             		}
             		
             	//if arg0 = create
             	} else if(args[0].equalsIgnoreCase("create")){
-            		if(args.length == 2){
+            		if(args.length == 1){
             			player.sendMessage(ChatColor.RED + "Specify an action, use /dodgeball commands for the availible commands!");
-            		} else if(args.length == 1){
-            			player.sendMessage(ChatColor.RED + "Specify an action, use /dodgeball commands for the availible commands!");
+            		} else if(args.length == 2 && args[1].equalsIgnoreCase("lobby")){
+            			this.getConfig().set("Lobby.X", Math.floor(player.getLocation().getX()));
+            			this.getConfig().set("Lobby.Y", Math.floor(player.getLocation().getY()));
+            			this.getConfig().set("Lobby.Z", Math.floor(player.getLocation().getZ()));
+            			this.getConfig().set("Lobby.Yaw", Math.floor(player.getLocation().getYaw()));
+        				this.getConfig().set("Lobby.World", player.getLocation().getWorld().getName());
+        				saveConfig();
+            			player.sendMessage(ChatColor.RED + "Lobby spawn set!");
             		} else if(args.length == 3 && args[1].equalsIgnoreCase("arena")){
             			this.getConfig().set("Arenas."+ args[2], "");
             			arenaName = args[2];
@@ -164,6 +184,7 @@ public class Main extends JavaPlugin{
             			} else if(corner == 3){
             				this.getConfig().set("Arenas." + arenaName + ".X4", Math.floor(player.getLocation().getX()));
             				this.getConfig().set("Arenas." + arenaName + ".Z4", Math.floor(player.getLocation().getZ()));
+            				this.getConfig().set("Arenas." + arenaName + ".World", player.getLocation().getWorld().getName());
             				player.sendMessage(ChatColor.RED + "Corner 4/4 set!");
             				corner++;
             				player.sendMessage(ChatColor.RED + "Use '/dodgeball create middle next' to define the middle");
@@ -193,6 +214,7 @@ public class Main extends JavaPlugin{
             				this.getConfig().set("Arenas." + arenaName + ".SpawnRed.X", Math.floor(player.getLocation().getX()));
             				this.getConfig().set("Arenas." + arenaName + ".SpawnRed.Y", Math.floor(player.getLocation().getY()));
             				this.getConfig().set("Arenas." + arenaName + ".SpawnRed.Z", Math.floor(player.getLocation().getZ()));
+            				this.getConfig().set("Arenas." + arenaName + ".SpawnRed.Yaw", Math.floor(player.getLocation().getYaw()));
             				player.sendMessage(ChatColor.RED + "Red Spawn set!");
             				spawns++;
             				if(spawns == 2){
@@ -207,6 +229,7 @@ public class Main extends JavaPlugin{
             				this.getConfig().set("Arenas." + arenaName + ".SpawnBlue.X", Math.floor(player.getLocation().getX()));
             				this.getConfig().set("Arenas." + arenaName + ".SpawnBlue.Y", Math.floor(player.getLocation().getY()));
             				this.getConfig().set("Arenas." + arenaName + ".SpawnBlue.Z", Math.floor(player.getLocation().getZ()));
+            				this.getConfig().set("Arenas." + arenaName + ".SpawnBlue.Yaw", Math.floor(player.getLocation().getYaw()));
             				player.sendMessage(ChatColor.RED + "Blue Spawn set!");
             				spawns++;
             				if(spawns == 2){
@@ -229,28 +252,66 @@ public class Main extends JavaPlugin{
             return false;
     }
     
-	public void tpPlayerToLobby(){
+	public void tpPlayerToLobby(Player player){
+		int playerX = (int) Math.round(player.getLocation().getX());
+		int playerY = (int) Math.round(player.getLocation().getY());
+		int playerZ = (int) Math.round(player.getLocation().getZ());
+		int playerYaw = (int) Math.round(player.getLocation().getYaw());
+		int playerPitch = (int) Math.round(player.getLocation().getPitch());
+		World playerWorld = (World)player.getLocation().getWorld();
 		
+		playerOriginalLocX.put(player, playerX);
+		playerOriginalLocY.put(player, playerY);
+		playerOriginalLocZ.put(player, playerZ);
+		playerOriginalLocYaw.put(player, playerYaw);
+		playerOriginalLocPitch.put(player, playerPitch);
+		playerOriginalLocWorld.put(player, playerWorld);
+		
+		//teleport
+		
+		int tpX = this.getConfig().getInt("Lobby.X");
+		int tpY = this.getConfig().getInt("Lobby.Y");
+		int tpZ = this.getConfig().getInt("Lobby.Z");
+		int tpYaw = this.getConfig().getInt("Lobby.Yaw");
+		World tpWorld = getServer().getWorld((String) this.getConfig().get("Lobby.World"));
+		
+		Location loc = new Location(tpWorld, tpX, tpY, tpZ, tpYaw, player.getLocation().getPitch());
+		player.teleport(loc);
 	}
 	
 	public void tpPlayersToArena(String arena){
 		for(Player player:Main.playersInGameRed){
-			int spawnX = getConfig().getInt("Arenas.Test.SpawnRed.X");
-			int spawnY = getConfig().getInt("Arenas.Test.SpawnRed.Y");
-			int spawnZ = getConfig().getInt("Arenas.Test.SpawnRed.Z");
-			Object world = player.getWorld();
+			int spawnX = getConfig().getInt("Arenas." + arena + ".SpawnRed.X");
+			int spawnY = getConfig().getInt("Arenas." + arena + ".SpawnRed.Y");
+			int spawnZ = getConfig().getInt("Arenas." + arena + ".SpawnRed.Z");
+			int spawnYaw = getConfig().getInt("Arenas." + arena + ".SpawnRed.Yaw");
+			World world = getServer().getWorld((String)getConfig().get("Arenas." + arena + ".World"));
 			
-			Location loc = new Location((World)world, spawnX, spawnY, spawnZ);
+			Location loc = new Location(world, spawnX, spawnY, spawnZ, spawnYaw, player.getLocation().getPitch());
 			player.teleport(loc);
 		}
+		
 		for(Player player:Main.playersInGameBlue){
-			int spawnX = getConfig().getInt("Arenas.Test.SpawnBlue.X");
-			int spawnY = getConfig().getInt("Arenas.Test.SpawnBlue.Y");
-			int spawnZ = getConfig().getInt("Arenas.Test.SpawnBlue.Z");
-			Object world = player.getWorld();
+			int spawnX = getConfig().getInt("Arenas." + arena + ".SpawnBlue.X");
+			int spawnY = getConfig().getInt("Arenas." + arena + ".SpawnBlue.Y");
+			int spawnZ = getConfig().getInt("Arenas." + arena + ".SpawnBlue.Z");
+			int spawnYaw = getConfig().getInt("Arenas." + arena + ".SpawnBlue.Yaw");
+			World world = getServer().getWorld((String)getConfig().get("Arenas." + arena + ".World"));
 			
-			Location loc = new Location((World)world, spawnX, spawnY, spawnZ);
+			Location loc = new Location(world, spawnX, spawnY, spawnZ, spawnYaw, player.getLocation().getPitch());
 			player.teleport(loc);
 		}
+	}
+	
+	public void tpPlayerToOriginalLoc(Player player){
+		int playerX = playerOriginalLocX.get(player);
+		int playerY = playerOriginalLocY.get(player);
+		int playerZ = playerOriginalLocZ.get(player);
+		int playerYaw = playerOriginalLocYaw.get(player);
+		int playerPitch = playerOriginalLocPitch.get(player);
+		World playerWorld = playerOriginalLocWorld.get(player);
+		
+		Location loc = new Location(playerWorld, playerX, playerY, playerZ, playerYaw, playerPitch);
+		player.teleport(loc);
 	}
 }
