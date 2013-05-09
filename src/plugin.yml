@@ -1,0 +1,8 @@
+name: EG_DodgeBall
+main: net.experience_gaming.dodgeball.Main
+version: 0.1
+description: >
+             First plugin for EG
+commands:
+   dodgeball:
+      description: Shows a help page for DodgeBall

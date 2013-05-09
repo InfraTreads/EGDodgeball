@@ -1,0 +1,40 @@
+# Experience Gaming Dodgeball Config
+# <- These are comments, they don't do anything except give you information!
+#
+# Gamemodes
+Gamemodes:
+    #Gamemode name
+    Standard:
+        # Total lives
+        Lives: 1
+        # Damage the ball does, 20 damage is 10 hearts
+        Snowball_Damage: 20
+        # Amount of balls
+        Balls: 2
+        # If the player can cross the middle border
+        Player_CrossLine: false
+# Arenas
+Arenas:
+    Default:
+        X1: 0
+        X2: 0
+        X3: 20
+        X4: 20
+        Z1: 0
+        Z2: 20
+        Z3: 20
+        Z4: 0
+        MiddleLine:
+            X1: 0
+            Z1: 0
+            X2: 0
+            Z2: 0
+        SpawnRed:
+            X: 0
+            Y: 0
+            Z: 0
+        SpawnBlue:
+            X: 0
+            Y: 0
+            Z: 0
+        
